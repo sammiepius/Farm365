@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import firebase from "./firebase";
-import moment from 'moment'
+import React, { Component } from 'react';
+import firebase from './firebase';
+import moment from 'moment';
 import {
   Card,
   CardHeader,
@@ -10,43 +10,43 @@ import {
   Input,
   Label,
   Button,
-  CardFooter
-} from "reactstrap";
+  CardFooter,
+} from 'reactstrap';
 
 class Vendors extends Component {
   state = {
     date: moment().format('YYYY-MM-DD'),
     time: moment().format('h:mm:a'),
-    name: "",
-    phone_number: "",
-    address: "",
-    quantity_of_product: "",
-    paid_or_debt: "",
-    town_city: "",
-    error: "",
-    vendors: []
+    name: '',
+    phone_number: '',
+    address: '',
+    quantity_of_product: '',
+    paid_or_debt: '',
+    town_city: '',
+    error: '',
+    vendors: [],
   };
 
   handleChange = ({ target }) => {
     this.setState({
       [target.name]: target.value,
-      error: ""
+      error: '',
     });
   };
   resetForm = () => {
     this.setState({
-      date: "",
-      time: "",
-      name: "",
-      phone_number: "",
-      address: "",
-      quantity_of_product: "",
-      paid_or_debt: "",
-      town_city: ""
+      date: '',
+      time: '',
+      name: '',
+      phone_number: '',
+      address: '',
+      quantity_of_product: '',
+      paid_or_debt: '',
+      town_city: '',
     });
   };
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
 
     let obj = {
@@ -57,7 +57,7 @@ class Vendors extends Component {
       address: this.state.address,
       quantity_of_product: this.state.quantity_of_product,
       paid_or_debt: this.state.paid_or_debt,
-      town_city: this.state.town_city
+      town_city: this.state.town_city,
     };
     const {
       date,
@@ -68,32 +68,32 @@ class Vendors extends Component {
       quantity_of_product,
       paid_or_debt,
 
-      town_city
+      town_city,
     } = this.state;
     if (
-      date === "" ||
-      time === "" ||
-      name === "" ||
-      phone_number === "" ||
-      address === "" ||
-      quantity_of_product === "" ||
-      paid_or_debt === "" ||
-      town_city === ""
+      date === '' ||
+      time === '' ||
+      name === '' ||
+      phone_number === '' ||
+      address === '' ||
+      quantity_of_product === '' ||
+      paid_or_debt === '' ||
+      town_city === ''
     ) {
-      this.setState({ error: "Please complete the form" });
+      this.setState({ error: 'Please complete the form' });
     } else {
       firebase
         .database()
-        .ref("vendors")
+        .ref('vendors')
         .push(obj)
         .then(() => {
           this.setState({ submitting: false });
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
       this.setState(
-        prevState => ({
+        (prevState) => ({
           vendors: prevState.vendors.concat({
             date: date,
             time: time,
@@ -102,8 +102,8 @@ class Vendors extends Component {
             address: address,
             quantity_of_product: quantity_of_product,
             paid_or_debt: paid_or_debt,
-            town_city: town_city
-          })
+            town_city: town_city,
+          }),
         }),
         () => this.resetForm()
       );
@@ -122,8 +122,8 @@ class Vendors extends Component {
         address,
         quantity_of_product,
         error,
-        town_city
-      }
+        town_city,
+      },
     } = this;
 
     return (
@@ -131,7 +131,7 @@ class Vendors extends Component {
         <br />
         <br />
         <Form onSubmit={handleSubmit}>
-          <Card>
+          <Card className='shadow'>
             <CardHeader>
               <center>
                 <h4>Vendors</h4>
@@ -225,7 +225,7 @@ class Vendors extends Component {
                         name="paid_or_debt"
                         value="paid"
                         onChange={handleChange}
-                      />{" "}
+                      />{' '}
                       Paid
                     </Label>
                   </FormGroup>
@@ -236,21 +236,21 @@ class Vendors extends Component {
                         name="paid_or_debt"
                         value="Debt"
                         onChange={handleChange}
-                      />{" "}
+                      />{' '}
                       Debt
                     </Label>
                   </FormGroup>
                 </div>
               </FormGroup>
-              {error !== "" ? (
+              {error !== '' ? (
                 <center>
-                  <p style={{ color: "red" }}>{error}</p>
+                  <p style={{ color: 'red' }}>{error}</p>
                 </center>
               ) : null}
             </CardBody>
             <CardFooter>
               <center>
-                {" "}
+                {' '}
                 <Button color="primary" outline size="sm">
                   Submit
                 </Button>

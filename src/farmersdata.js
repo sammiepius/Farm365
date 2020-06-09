@@ -1,15 +1,40 @@
-import React, { Component } from "react";
-import { Table } from "reactstrap";
-import firebase from "./firebase";
+import React, { Component } from 'react';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import firebase from './firebase';
+import { Scrollbars } from 'react-custom-scrollbars';
+
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  body: {
+    fontSize: 14,
+  },
+}))(TableCell);
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+  },
+}))(TableRow);
 
 class FarmersData extends Component {
   state = {
     loading: false,
-    farmersdata: []
+    farmersdata: [],
   };
   componentDidMount() {
-    const itemsRef = firebase.database().ref("farmdata");
-    itemsRef.on("value", snapshot => {
+    const itemsRef = firebase.database().ref('farmdata');
+    itemsRef.on('value', (snapshot) => {
       // console.log(snapshot.val());
       let items = snapshot.val();
       let newState = [];
@@ -31,56 +56,104 @@ class FarmersData extends Component {
       }
       console.log(newState);
       this.setState({
-        farmersdata: newState
+        farmersdata: newState,
       });
     });
   }
-
+  useStyles = () => {
+    makeStyles({
+      table: {
+        minWidth: 700,
+      },
+    });
+  };
   render() {
     return (
       <div className="container">
-        <br/>
-        <Table responsive striped>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Names</th>
-              <th>Phone Number</th>
-              <th>Local Government</th>
-              <th>Village</th>
-              <th>Farm Cluster</th>
-              <th>Type of farm produce</th>
-              <th>variety of farm produce</th>
-              <th>Quantity of harvest</th>
-              <th>paid/debt</th>
-              <th>Size of farm land</th>
-              <th>Harvest period</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              this.state.farmersdata.map((item, index) => {
-                // console.log(item)
-                return (
-                  <tr key={index}>
-                    {" "}
-                    <td>{item.date}</td>
-                    <td>{item.name}</td>
-                    <td>{item.phone_number}</td>
-                    <td>{item.type_of_farm_produce}</td>
-                    <td>{item.local_government}</td>
-                    <td>{item.village}</td>
-                    <td>{item.farm_cluster}</td>
-                    <td>{item.variety_of_farm_produce}</td>
-                    <td>{item.quantity_of_harvest}</td>
-                    <td>{item.paid_or_debt}</td>
-                    <td>{item.size_of_farm_land}</td>
-                    <td>{item.harvest_period}</td>
-                  </tr>
-                );
-              })}
-          </tbody>
-        </Table>
+        <br />
+        <TableContainer component={Paper}>
+          <Scrollbars style={{ width: 1200, height: 500 }}>
+            <Table
+              className={this.useStyles}
+              aria-label="simple table"
+              size="small"
+              aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell>Date</StyledTableCell>
+                  <StyledTableCell align="right">Names</StyledTableCell>
+                  <StyledTableCell align="right">Phone Number</StyledTableCell>
+                  <StyledTableCell align="right">
+                    Local Government
+                  </StyledTableCell>
+                  <StyledTableCell align="right">Village</StyledTableCell>
+                  <StyledTableCell align="right">Farm Cluster</StyledTableCell>
+                  <StyledTableCell align="right">
+                    Type of farm produce
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    variety of farm produce
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    Quantity of harvest
+                  </StyledTableCell>
+                  <StyledTableCell align="right">paid/debt</StyledTableCell>
+                  <StyledTableCell align="right">
+                    Size of farm land
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    Harvest period
+                  </StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {this.state.farmersdata.map((item, index) => {
+                  // console.log(item)
+                  return (
+                    <StyledTableRow key={index}>
+                      <StyledTableCell component="th" scope="row">
+                        {item.date}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {item.name}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {item.phone_number}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {item.type_of_farm_produce}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {item.local_government}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {item.village}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {item.farm_cluster}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {item.variety_of_farm_produce}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {item.quantity_of_harvest}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {item.paid_or_debt}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {item.size_of_farm_land}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {item.harvest_period}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </Scrollbars>
+        </TableContainer>
       </div>
     );
   }
